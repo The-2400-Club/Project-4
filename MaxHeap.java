@@ -3,6 +3,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
     private T[] heap;       //Array of heap entries
     private int lastIndex;  //Index of last entry
     private static final int DEFAULT_CAPACITY = 25;
+    private int swaps;
 
     public MaxHeap()
     {
@@ -16,6 +17,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
         T[] tempHeap = (T[]) new Comparable[initialCapacity + 1];
         heap = tempHeap;
         lastIndex = 0;
+        swaps = 0;
     } //end constructor
 
     public void reheap(int rootIndex)
@@ -33,11 +35,13 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
                 heap[rightChildIndex].compareTo(heap[largerChildIndex]) > 0)
             {
                 largerChildIndex = rightChildIndex;
+                swaps++;
             } //end if
 
             if(orphan.compareTo(heap[largerChildIndex]) < 0)
             {
                 heap[rootIndex] = heap[largerChildIndex];
+                swaps++;
                 rootIndex = largerChildIndex;
                 leftChildIndex = 2 * rootIndex;
             }
@@ -48,6 +52,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
         } //end while
         
         heap[rootIndex] = orphan;
+        swaps++;
     } //end reheap
 
     public void add(T newEntry)
@@ -57,10 +62,12 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
         while((parentIndex > 0) && newEntry.compareTo(heap[parentIndex]) > 0)
         {
             heap[newIndex] = heap[parentIndex];
+            swaps++;
             newIndex = parentIndex;
             parentIndex = newIndex / 2;
         } //end while
         heap[newIndex] = newEntry;
+        swaps++;
         lastIndex++;
     } //end add
 
